@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.ValidateService;
+import ru.yandex.practicum.filmorate.service.ValidateUserService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,31 +14,32 @@ import java.util.List;
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-    private final ValidateService validateService = new ValidateService();
+    private final ValidateUserService validateUserService = new ValidateUserService();
     private final HashMap<Integer, User> users = new HashMap<>();
     private int idCount = 1;
 
     @GetMapping
     public List<User> getUsers() {
+        log.debug("GET users");
         return new ArrayList<User>(users.values());
     }
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        validateService.validate(user);
+        validateUserService.validate(user);
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         user.setId(idCount);
         idCount++;
         users.put(user.getId(), user);
-        log.debug(user.toString());
+        log.debug("POST " + user.toString());
         return user;
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        validateService.validate(user);
+        validateUserService.validate(user);
         if (!users.containsKey(user.getId())) {
             log.debug("User does not exist");
             throw new ValidationException();
@@ -48,7 +48,7 @@ public class UserController {
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
-        log.debug(user.toString());
+        log.debug("PUT " + user.toString());
         return user;
     }
 }

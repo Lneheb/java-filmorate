@@ -10,22 +10,22 @@ import java.time.LocalDate;
 public class FilmControllerTest {
     private FilmController filmController = new FilmController();
     @Test
-    public void createFilmBlankName() {
+    public void createFilm_throwValidateException_blankName() {
         Film film = new Film(1,"", "desc", LocalDate.of(2000,1,1),100);
         Assertions.assertThrows(ValidationException.class, () -> filmController.createFilm(film));
     }
     @Test
-    public void createFilmNegativeDuration() {
+    public void createFilm_throwValidateException_negativeDuration() {
         Film film = new Film(1,"name", "desc", LocalDate.of(2000,1,1),0);
         Assertions.assertThrows(ValidationException.class, () -> filmController.createFilm(film));
     }
     @Test
-    public void createFilmInvalidDate() {
+    public void createFilm_throwValidateException_invalidDate() {
         Film film = new Film(1,"name", "desc", LocalDate.of(1895,12,27), 100);
         Assertions.assertThrows(ValidationException.class, () -> filmController.createFilm(film));
     }
     @Test
-    public void updateFilmNotExist() {
+    public void updateFilm_throwValidateException_notExist() {
         Film film = new Film(1,"name", "desc", LocalDate.of(2000,1,1),100);
         Assertions.assertThrows(ValidationException.class, () -> filmController.updateFilm(film));
     }
