@@ -11,15 +11,15 @@ public class ValidateUserService {
     public void validate(User user) {
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             log.debug("Invalid email");
-            throw new ValidationException();
+            throw new ValidationException("Invalid email");
         }
         if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             log.debug("Invalid login");
-            throw new ValidationException();
+            throw new ValidationException("Invalid login");
         }
         if (user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
             log.debug("Invalid birthday");
-            throw new ValidationException();
+            throw new ValidationException("Invalid birthday");
         }
     }
 

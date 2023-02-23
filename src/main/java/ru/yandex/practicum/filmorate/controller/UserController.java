@@ -42,7 +42,7 @@ public class UserController {
         validateUserService.validate(user);
         if (!users.containsKey(user.getId())) {
             log.debug("User does not exist");
-            throw new ValidationException();
+            throw new ValidationException("User does not exist");
         }
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());

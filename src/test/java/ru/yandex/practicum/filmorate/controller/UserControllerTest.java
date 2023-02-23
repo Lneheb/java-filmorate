@@ -46,4 +46,11 @@ public class UserControllerTest {
         User user = new User(1000, "email@e.com", "login" ,"name", LocalDate.of(2000,1,1));
         Assertions.assertThrows(ValidationException.class, () -> userController.updateUser(user));
     }
+    @Test
+    public void updateUser_noException() {
+        User user = new User(1000, "email@e.com", "login" ,"name", LocalDate.of(2000,1,1));
+        userController.createUser(user);
+        user.setName("name1");
+        userController.updateUser(user);
+    }
 }

@@ -29,4 +29,11 @@ public class FilmControllerTest {
         Film film = new Film(1,"name", "desc", LocalDate.of(2000,1,1),100);
         Assertions.assertThrows(ValidationException.class, () -> filmController.updateFilm(film));
     }
+    @Test
+    public void updateFilm_noException() {
+        Film film = new Film(1,"name", "desc", LocalDate.of(2000,1,1),100);
+        filmController.createFilm(film);
+        film.setName("name1");
+        filmController.updateFilm(film);
+    }
 }

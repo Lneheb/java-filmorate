@@ -39,7 +39,7 @@ public class FilmController {
         validateFilmService.validate(film);
         if (!films.containsKey(film.getId())) {
             log.debug("Film does not exist");
-            throw new ValidationException();
+            throw new ValidationException("Film does not exist");
         }
         films.put(film.getId(), film);
         log.debug("PUT " + film.toString());
