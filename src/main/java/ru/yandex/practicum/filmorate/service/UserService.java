@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Indexed;
 import org.springframework.stereotype.Service;
@@ -13,34 +14,23 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
-    private ValidateUserService validateUserService;
-    private UserStorage userStorage;
-    @Autowired
-    public UserService(ValidateUserService validateUserService, UserStorage userStorage) {
-        this.validateUserService = validateUserService;
-        this.userStorage = userStorage;
-    }
 
-    private int idCount = 1;
-
+    private final UserStorage userStorage;
     public List<User> getUsers() {
         return userStorage.getUsers();
     }
 
     public User createUser(User user) {
-        validateUserService.validate(user);
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
-        user.setId(idCount);
-        idCount++;
         user.setFriends(new HashSet<>());
         userStorage.createUser(user);
         return user;
     }
     public User updateUser(User user) {
-        validateUserService.validate(user);
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }

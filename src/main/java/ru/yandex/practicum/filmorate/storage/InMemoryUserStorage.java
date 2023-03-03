@@ -2,8 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.FilmOrUserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -14,12 +13,15 @@ import java.util.List;
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
     private final HashMap<Integer, User> users = new HashMap<>();
+    private int idCount = 1;
     @Override
     public List<User> getUsers() {
         return new ArrayList<>(users.values());
     }
     @Override
     public void createUser(User user) {
+        user.setId(idCount);
+        idCount++;
         users.put(user.getId(), user);
     }
 
@@ -27,7 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
     public void updateUser(User newUser) {
         if (!users.containsKey(newUser.getId())) {
             log.debug("User does not exist");
-            throw new UserNotFoundException("User does not exist");
+            throw new FilmOrUserNotFoundException("User does not exist");
         }
         User oldUser = users.get(newUser.getId());
         newUser.setFriends(oldUser.getFriends());
@@ -38,7 +40,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User getUser(Integer id) {
         if (!users.containsKey(id)) {
             log.debug("User does not exist");
-            throw new UserNotFoundException("User does not exist");
+            throw new FilmOrUserNotFoundException("User does not exist");
         }
         return users.get(id);
     }

@@ -9,4 +9,5 @@ public interface FilmStorage {
     void createFilm(Film film);
     void updateFilm(Film film);
     Film getFilm(Integer id);
+    boolean containsFilmId(Integer id);
 }

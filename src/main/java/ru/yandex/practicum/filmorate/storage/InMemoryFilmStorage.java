@@ -2,8 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.FilmOrUserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
@@ -14,12 +13,15 @@ import java.util.List;
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage{
     private final HashMap<Integer, Film> films = new HashMap<>();
+    private int idCount = 1;
     @Override
     public List<Film> getFilms() {
         return new ArrayList<>(films.values());
     }
     @Override
     public void createFilm(Film film) {
+        film.setId(idCount);
+        idCount++;
         films.put(film.getId(), film);
     }
 
@@ -27,7 +29,7 @@ public class InMemoryFilmStorage implements FilmStorage{
     public void updateFilm(Film newFilm) {
         if (!films.containsKey(newFilm.getId())) {
             log.debug("Film does not exist");
-            throw new FilmNotFoundException("Film does not exist");
+            throw new FilmOrUserNotFoundException("Film does not exist");
         }
         Film oldFilm = films.get(newFilm.getId());
         newFilm.setLikes(oldFilm.getLikes());
@@ -38,8 +40,12 @@ public class InMemoryFilmStorage implements FilmStorage{
     public Film getFilm(Integer id) {
         if (!films.containsKey(id)) {
             log.debug("Film does not exist");
-            throw new FilmNotFoundException("Film does not exist");
+            throw new FilmOrUserNotFoundException("Film does not exist");
         }
         return films.get(id);
+    }
+    @Override
+    public boolean containsFilmId(Integer id) {
+        return films.containsKey(id);
     }
 }

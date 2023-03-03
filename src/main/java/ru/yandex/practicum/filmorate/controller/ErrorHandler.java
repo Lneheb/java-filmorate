@@ -4,8 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.FilmOrUserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import java.util.Map;
@@ -13,11 +12,7 @@ import java.util.Map;
 @ControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler
-    public ResponseEntity<Map<String,String>> handleFilmNotFound(FilmNotFoundException e) {
-        return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler
-    public ResponseEntity<Map<String,String>> handleUserNotFound(UserNotFoundException e) {
+    public ResponseEntity<Map<String,String>> handleFilmNotFound(FilmOrUserNotFoundException e) {
         return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler

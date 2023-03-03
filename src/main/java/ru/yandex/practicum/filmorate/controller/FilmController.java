@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class FilmController {
-
-    private FilmService filmService;
-    @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
-    }
-
+    private final FilmService filmService;
+    private final ValidateFilmService validateFilmService;
     @GetMapping
     public List<Film> getFilms() {
         log.debug("GET films");
@@ -32,12 +29,14 @@ public class FilmController {
     @PostMapping
     public Film createFilm(@RequestBody Film film) {
         log.debug("POST " + film.toString());
+        validateFilmService.validate(film);
         return filmService.createFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         log.debug("PUT " + film.toString());
+        validateFilmService.validate(film);
         return filmService.updateFilm(film);
     }
     @GetMapping("/{id}")
@@ -56,7 +55,7 @@ public class FilmController {
         filmService.deleteLike(id, userId);
     }
     @GetMapping("/popular")
-    public List<Film> getMostPopularFilms(@RequestParam(defaultValue = "10") String count) {
+    public List<Film> getMostPopularFilms(@RequestParam(required = false, defaultValue = "10") String count) {
         log.debug("GET popular films");
         Integer integerCount = Integer.parseInt(count);
         return filmService.getMostPopularFilms(integerCount);
