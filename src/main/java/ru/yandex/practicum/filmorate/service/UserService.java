@@ -14,10 +14,13 @@ import java.util.*;
 
 @Service
 public class UserService {
-    @Autowired
     private ValidateUserService validateUserService;
-    @Autowired
     private UserStorage userStorage;
+    @Autowired
+    public UserService(ValidateUserService validateUserService, UserStorage userStorage) {
+        this.validateUserService = validateUserService;
+        this.userStorage = userStorage;
+    }
 
     private int idCount = 1;
 

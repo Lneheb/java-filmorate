@@ -21,12 +21,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    @Autowired
+
     private ValidateFilmService validateFilmService;
-    @Autowired
+
     private FilmStorage filmStorage;
-    @Autowired
+
     private UserStorage userStorage;
+    @Autowired
+    public FilmService(ValidateFilmService validateFilmService, FilmStorage filmStorage, UserStorage userStorage) {
+        this.validateFilmService = validateFilmService;
+        this.filmStorage = filmStorage;
+        this.userStorage = userStorage;
+    }
+
     private int idCount = 1;
 
     public List<Film> getFilms() {
