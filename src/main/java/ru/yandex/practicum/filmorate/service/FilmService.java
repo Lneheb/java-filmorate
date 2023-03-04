@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.FilmOrUserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -13,11 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class FilmService {
-
-
-
     private final FilmStorage filmStorage;
 
     private final UserStorage userStorage;
@@ -39,14 +36,14 @@ public class FilmService {
         return filmStorage.getFilm(id);
     }
     public void putLike(Integer id, Integer userId) {
-        if (!userStorage.containsUserId(userId) || !filmStorage.containsFilmId(id)){
-            throw new FilmOrUserNotFoundException("User does not exist");
+        if (!userStorage.containsUserId(userId)){
+            throw new NotFoundException("User does not exist");
         }
         filmStorage.getFilm(id).getLikes().add(userId);
     }
     public void deleteLike(Integer id, Integer userId) {
         if (!userStorage.containsUserId(userId)){
-            throw new FilmOrUserNotFoundException("User does not exist");
+            throw new NotFoundException("User does not exist");
         }
         filmStorage.getFilm(id).getLikes().remove(userId);
     }
